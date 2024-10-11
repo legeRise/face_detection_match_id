@@ -27,8 +27,9 @@ def compare_faces():
 
     # Compare faces
     results = face_recognition.compare_faces([encoding1[0]], encoding2[0])
+    print(results[0])
     
-    return jsonify({"match": results[0]})
+    return jsonify({"match": bool(results[0])})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
