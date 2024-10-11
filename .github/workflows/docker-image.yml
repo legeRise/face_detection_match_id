@@ -1,0 +1,29 @@
+name: Building docker Image
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGENAME: "face_id_detection"
+      DOCKERHUB_REPO: "face_id_match"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build the Docker image
+        run: docker build -t ${{ env.IMAGENAME }} .
+
+      - name: Tag the image
+        run: docker tag ${{ env.IMAGENAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:latest
+
+      - name: Log in to DockerHub
+        run: docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin <<<${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Push to DockerHub
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}
