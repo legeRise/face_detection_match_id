@@ -3,4 +3,3 @@ face_recognition
 dlib
 numpy
 opencv-python
-cmake
